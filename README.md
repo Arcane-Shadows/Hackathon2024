@@ -237,12 +237,15 @@ We’ll assume there are two roles: "ghost" and "human". We'll restrict access t
 We’ll use JWT (JSON Web Token) to handle user authentication. The JWT will include a claim that specifies whether the user is a "ghost" or a "human."
 
 
+
 {
   "sub": "1234567890",
   "name": "John Doe",
   "role": "human",
   "iat": 1516239022
 }
+
+
 
 The `role` claim will help us enforce access control on the API endpoints.
 
@@ -252,8 +255,9 @@ We’ll create a middleware function that checks the user’s role before allowi
 
 Example in Node.js using Express.js:
 
-const jwt = require('jsonwebtoken');
 
+
+const jwt = require('jsonwebtoken');
 function authorizeRole(requiredRole) {
   return (req, res, next) => {
     const token = req.headers['authorization'];
@@ -273,11 +277,16 @@ function authorizeRole(requiredRole) {
   };
 }
 
+
+
 Step 4: Protect Endpoints Based on Role
 
 We’ll now protect the ghost and human endpoints so that only users with the correct role can access them.
 
 Example:
+
+
+
 
 const express = require('express');
 const app = express();
@@ -303,9 +312,13 @@ app.listen(3000, () => {
 });
 
 
+
+
  Step 5: Issuing Tokens Based on Role
 
 When a user logs in or registers, the backend should generate a JWT with their assigned role (either ghost or human). Here's how you can issue a token:
+
+
 
 
 function generateToken(user) {
@@ -323,10 +336,13 @@ const token = generateToken(user);
 console.log(token); 
 
 
+
  Step 6: Securing Endpoints (Optional)
 
 To enhance security, you can implement additional measures:
 1. Rate Limiting: Limit the number of requests each user can make to prevent abuse.
+
+
  
    const rateLimit = require('express-rate-limit');
    const limiter = rateLimit({
@@ -334,9 +350,11 @@ To enhance security, you can implement additional measures:
      max: 100,
    });
    app.use(limiter);
+
   
 
 2. CORS Protection: Ensure that only trusted domains can access the API.
+
  
    const cors = require('cors');
    const corsOptions = {
@@ -346,14 +364,19 @@ To enhance security, you can implement additional measures:
    app.use(cors(corsOptions));
   
 
+
 Step 7: Logging and Monitoring
 
 Track and log attempts to access restricted endpoints to monitor potential abuse:
+
+
 
 app.use((req, res, next) => {
   console.log(`User with role ${req.user.role} accessed ${req.path}`);
   next();
 });
+
+
 
  Step 8: Testing
 
